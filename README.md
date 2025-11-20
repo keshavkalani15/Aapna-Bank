@@ -73,7 +73,7 @@ Aapna-Bank/
 
 ### 1. Clone the Project
 ```bash
-git clone https://github.com/keshavkalani_15/Aapna-Bank.git
+git clone https://github.com/keshavkalani15/Aapna-Bank.git
 cd Aapna-Bank
 ```
 
