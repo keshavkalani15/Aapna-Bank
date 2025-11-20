@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update User - Aapna Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="https://placehold.co/150x50/FFFFFF/003366?text=Aapna+Bank" alt="Aapna Bank Logo" class="logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('manager_dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('manager_logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header>
+                <h1>Update Customer Details</h1>
+                <p>Editing profile for {{ user.first_name }} {{ user.last_name }} (Account: {{ user.account_number }})</p>
+            </header>
+            
+            <div class="card">
+                <form action="{{ url_for('update_user', user_id=user.user_id) }}" method="post" class="creation-form">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="form-group-full">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone_number">Phone Number</label>
+                        <input type="tel" id="phone_number" name="phone_number" value="{{ user.phone_number }}" required pattern="[0-9]{10}">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary form-group-full">Update Details</button>
+                    <a href="{{ url_for('manager_dashboard') }}" class="btn btn-secondary form-group-full" style="text-align: center;">Cancel</a>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

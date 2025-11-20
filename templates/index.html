@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Aapna Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 style="white-space: nowrap;">Welcome to Aapna Bank</h1>
+            <p>Secure, fast, and reliable online banking services designed for you.</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Customer Login</a>
+                <a href="{{ url_for('manager_login') }}" class="btn btn-secondary">Manager Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

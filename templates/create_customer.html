@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Customer Account - Aapna Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="https://placehold.co/150x50/FFFFFF/003366?text=Aapna+Bank" alt="Aapna Bank Logo" class="logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('manager_dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('manager_logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header>
+                <h1>Create New Customer Account</h1>
+                <p>Fill in the details below to open a new account.</p>
+            </header>
+
+            <div class="card">
+                <form action="{{ url_for('create_customer') }}" method="post" class="creation-form">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="form-group-full">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone_number">Phone Number</label>
+                        <input type="tel" id="phone_number" name="phone_number" required maxlength="10">
+                        <span id="phone-error" style="color: red; font-size: 0.9em;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Set Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pin">Set 4-Digit PIN</label>
+                        <input type="password" id="pin" name="pin" required maxlength="4" pattern="\d{4}">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary form-group-full">Create Account</button>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script>
+        const phoneInput = document.getElementById('phone_number');
+        const phoneError = document.getElementById('phone-error');
+        const submitButton = document.querySelector('button[type="submit"]');
+
+        phoneInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
+            }
+            validatePhone();
+        });
+
+        function validatePhone() {
+            if (phoneInput.value.length > 0 && phoneInput.value.length !== 10) {
+                phoneError.textContent = 'Phone number must be exactly 10 digits.';
+                submitButton.disabled = true;
+            } else {
+                phoneError.textContent = '';
+                submitButton.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History - Aapna Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="https://placehold.co/150x50/FFFFFF/003366?text=Aapna+Bank" alt="Aapna Bank Logo" class="logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('transfer') }}">Transfer Money</a></li>
+                    <li class="active"><a href="{{ url_for('transaction_history') }}">Transaction History</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header>
+                <h1>Transaction History</h1>
+                <p>A complete record of your account activity.</p>
+            </header>
+            
+            <div class="card recent-transactions">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tx in transactions %}
+                        <tr>
+                            <td>{{ tx.timestamp.strftime('%d %b %Y, %I:%M %p') }}</td>
+                            <td>{{ tx.description }}</td>
+                            <td>{{ tx.transaction_type }}</td>
+                            <!-- THE FIX IS HERE -->
+                            {% if tx.transaction_type == 'Credit' %}
+                                <td class="transaction-amount credit">+ ₹{{ "%.2f"|format(tx.amount) }}</td>
+                            {% else %}
+                                <td class="transaction-amount debit">- ₹{{ "%.2f"|format(tx.amount) }}</td>
+                            {% endif %}
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align: center;">No transactions found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+

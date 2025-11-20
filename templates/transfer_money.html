@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Money - Aapna Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="https://placehold.co/150x50/FFFFFF/003366?text=Aapna+Bank" alt="Aapna Bank Logo" class="logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li class="active"><a href="{{ url_for('transfer') }}">Transfer Money</a></li>
+                    <li><a href="{{ url_for('transaction_history') }}">Transaction History</a></li>
+                    <!-- THE FIX IS HERE -->
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header>
+                <h1>Fund Transfer</h1>
+                <p>Send money securely using an account number or mobile number.</p>
+            </header>
+            
+            <div class="card">
+                <form action="{{ url_for('transfer') }}" method="post" class="creation-form">
+                     {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="form-group-full">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="form-group form-group-full">
+                        <label for="recipient_identifier">Recipient's Account or Phone Number</label>
+                        <input type="text" id="recipient_identifier" name="recipient_identifier" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount (₹)</label>
+                        <input type="number" id="amount" name="amount" min="1" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pin">Your 4-Digit PIN</label>
+                        <input type="password" id="pin" name="pin" required maxlength="4" pattern="\d{4}">
+                    </div>
+                    <button type="submit" class="btn btn-primary form-group-full">Transfer Now</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - Aapna Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="https://placehold.co/150x50/FFFFFF/003366?text=Aapna+Bank" alt="Aapna Bank Logo" class="logo">
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="{{ url_for('manager_dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('manager_logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="dashboard-header">
+                <div>
+                    <h1>Manager Dashboard</h1>
+                    <p>A complete list of all customer accounts.</p>
+                </div>
+                <a href="{{ url_for('create_customer') }}" class="btn btn-primary">Create New Customer</a>
+            </header>
+
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search by name, account number, or status...">
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="card recent-transactions">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Account No.</th>
+                            <th>Type</th>
+                            <th>Balance</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customer-table-body">
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.account_number }}</td>
+                            <td>Savings</td>
+                            <td>₹{{ "%.2f"|format(user.balance) }}</td>
+                            <td>{{ user.status }}</td>
+                            <td class="actions">
+                                <a href="{{ url_for('toggle_status', user_id=user.user_id) }}" class="btn btn-{{ 'warning' if user.status == 'Active' else 'info' }}">{{ 'Deactivate' if user.status == 'Active' else 'Activate' }}</a>
+                                <a href="{{ url_for('manager_transaction', account_number=user.account_number, action='deposit') }}" class="btn btn-success">Deposit</a>
+                                <a href="{{ url_for('manager_transaction', account_number=user.account_number, action='withdraw') }}" class="btn btn-danger">Withdraw</a>
+                                <a href="{{ url_for('update_user', user_id=user.user_id) }}" class="btn btn-info">Update</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="6" style="text-align:center;">No customers found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.getElementById('search-input').addEventListener('keyup', function() {
+            let filter = this.value.toUpperCase();
+            let tableBody = document.getElementById('customer-table-body');
+            let rows = tableBody.getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                let cells = rows[i].getElementsByTagName('td');
+                if (cells.length > 0) {
+                    let name = cells[0].textContent || cells[0].innerText;
+                    let accountNumber = cells[1].textContent || cells[1].innerText;
+                    let status = cells[4].textContent || cells[4].innerText;
+                    if (name.toUpperCase().indexOf(filter) > -1 || accountNumber.toUpperCase().indexOf(filter) > -1 || status.toUpperCase().indexOf(filter) > -1) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
