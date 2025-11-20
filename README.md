@@ -92,6 +92,8 @@ pip install -r requirements.txt
 python app.py
 ```
 
+* important note: change the password in app.py to you original password, create a database with the name as of in the app.py
+  
 > The application will start at http://127.0.0.1:5000/
 
 ## 📜 License
